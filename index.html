@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Audio Mixer Test Page</title>
+
+	<style>
+		* { font-family: sans-serif; }
+
+		h4 {
+			display: inline-block;
+			width: 5em;
+			margin: 0;
+			margin-right: 1em;
+		}
+
+		.slider {
+			display: inline-block;
+			position: relative;
+			width: 100px;
+			margin: 10px 0;
+			background: #eee;
+			height: 1em;
+		}
+		.playhead {
+			position: absolute;
+			width: 1px;
+			height: 100%;
+			background: black;
+		}
+
+		td {
+			border-width: 0;
+			padding: 0.5em;
+			border-collapse: separate;
+		}
+
+		tr.border-top td {
+			border-top: 1px solid #555;
+			padding-top: 1em;
+		}
+
+		.checkbox-label {
+			display: block;
+		}
+
+		button {
+			display: inline-block;
+			padding: 0.4em 0.6em;
+			background: none;
+			border: 1px solid black;
+			border-radius: 2px;
+		}
+		button:hover {
+			background: black;
+			color: white;
+			cursor: pointer;
+		}
+		button.active {
+			background: grey;
+			color: white;
+		}
+
+		select { width: 100%; }
+	</style>
+</head>
+<body>
+
+
+	<h2>advambient test page 0.1</h2>
+
+	Web Audio: <span id="webaudio"></span> <br>
+	<!-- Audio type: <span id="audioType"></span> -->
+
+	<br>
+
+
+	<table>
+
+		<tr>
+
+			<td><h4>Create</h4></td>
+
+			<td>
+				<button onclick="track1.create()"> create </button>
+				<button onclick="Mixer.removeTrack('track1')">remove</button>
+			</td>
+			<td>
+				<button onclick="track2.create()"> create</button>
+				<button onclick="Mixer.removeTrack('track2')">remove</button>
+			</td>
+			<td>
+				<button onclick="track3.create()"> create</button>
+				<button onclick="Mixer.removeTrack('track3')">remove</button>
+			</td>
+
+		</tr><tr>
+
+		<td><h4>Source</h4></td>
+
+			<td>
+				<select name="track1-source" id="track1-source">
+					<option value="rum">rum</option>
+					<option value="Drone_1_norm">rum</option>
+				</select>
+			</td>
+			<td>
+				<select name="track2-source" id="track2-source">
+					<option value="dm-tw-buzzlo">rum</option>
+					<option value="Helicopter_Interior">rum</option>
+				</select>
+			</td>
+			<td>
+				<select name="track3-source" id="track3-source">
+					<option value="dm-tw-woosh">rum</option>
+					<option value="SilverBottle">rum</option>
+				</select>
+			</td>
+
+		</tr><tr>
+
+		<td><h4>Source Mode</h4></td>
+
+			<td>
+				<select name="source-mode" id="track1-source-mode">
+					<option value="buffer">Buffer</option>
+					<option value="element">Element</option>
+				</select>
+			</td>
+			<td>
+				<select name="source-mode" id="track2-source-mode">
+					<option value="buffer">Buffer</option>
+					<option value="element">Element</option>
+				</select>
+			</td>
+			<td>
+				<select name="source-mode" id="track3-source-mode">
+					<option value="buffer">Buffer</option>
+					<option value="element">Element</option>
+				</select>
+			</td>
+
+		</tr><tr>
+
+		<td><h4>Attributes</h4></td>
+
+			<td>
+				<label class="checkbox-label" for="track1-looping">
+					<input type="checkbox" id="track1-looping" name="track1-looping">
+					looping
+				</label>
+				<label class="checkbox-label" for="track1-muted">
+					<input type="checkbox" id="track1-muted" name="track1-muted">
+					muted
+				</label>
+				<label class="checkbox-label" for="track1-autoplay">
+					<input type="checkbox" id="track1-autoplay" name="track1-autoplay" checked>
+					autoplay
+				</label>
+
+			</td>
+			<td>
+				<label class="checkbox-label" for="track2-looping">
+					<input type="checkbox" id="track2-looping" name="track2-looping">
+					looping
+				</label>
+				<label class="checkbox-label" for="track2-muted">
+					<input type="checkbox" id="track2-muted" name="track2-muted">
+					muted
+				</label>
+				<label class="checkbox-label" for="track2-autoplay">
+					<input type="checkbox" id="track2-autoplay" name="track2-autoplay" checked>
+					autoplay
+				</label>
+
+
+			</td>
+			<td>
+				<label class="checkbox-label" for="track3-looping">
+					<input type="checkbox" id="track3-looping" name="track3-looping">
+					looping
+				</label>
+				<label class="checkbox-label" for="track3-muted">
+					<input type="checkbox" id="track3-muted" name="track3-muted">
+					muted
+				</label>
+				<label class="checkbox-label" for="track3-autoplay">
+					<input type="checkbox" id="track3-autoplay" name="track3-autoplay" checked>
+					autoplay
+				</label>
+
+
+			</td>
+
+		</tr><tr class="border-top">
+
+			<td><h4>Gain</h4></td>
+
+			<td><input name="track1gain" id="track1gain" type="range" min="0" max="100" value="100"></td>
+			<td><input name="track2gain" id="track2gain" type="range" min="0" max="100" value="100"></td>
+			<td><input name="track3gain" id="track3gain" type="range" min="0" max="100" value="100"></td>
+
+		</tr><tr>
+
+			<td><h4>Tween Gain</h4></td>
+
+			<td>
+				<button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').tweenGain(0,1)">Out</button>
+				<button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').tweenGain(1,1,function(){ console.log('Drone in callback')})">In</button>
+			</td>
+
+		</tr><tr>
+
+			<td><h4>Pan</h4></td>
+
+			<td><input name="track1pan" id="track1pan" type="range" min="0" max="360" value="0"></td>
+			<td><input name="track2pan" id="track2pan" type="range" min="0" max="360" value="0"></td>
+			<td><input name="track3pan" id="track3pan" type="range" min="0" max="360" value="0"></td>
+
+		</tr><tr>
+
+			<td><h4>Tween Pan</h4> </td>
+
+			<td><button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').tweenPan(720, 6000)">Drone</button></td>
+			<!-- <td><button onclick="if(Mixer.getTrack('track2')) Mixer.getTrack('track2').play()">track2</button> </td> -->
+			<!-- <td><button onclick="if(Mixer.getTrack('track3')) Mixer.getTrack('track3').play()">track3</button> </td> -->
+
+		</tr><tr>
+
+			<td><h4>Pan Position</h4></td>
+
+			<td><canvas id="track1panCanvas" width="100" height="100"></canvas></td>
+			<td><canvas id="track2panCanvas" width="100" height="100"></canvas></td>
+			<td><canvas id="track3panCanvas" width="100" height="100"></canvas></td>
+
+		</tr><tr>
+
+			<td><h4>Progress</h4></td>
+
+			<td>
+				<div class="slider" id="track1slider"> <div class="playhead" id="track1playhead"></div></div> <br>
+				<div id="track1time">00:00/00:00</div>
+			</td>
+			<td>
+				<div class="slider" id="track2slider"> <div class="playhead" id="track2playhead"></div></div> <br>
+				<div id="track2time">00:00/00:00</div>
+			</td>
+			<td>
+				<div class="slider" id="track3slider"> <div class="playhead" id="track3playhead"></div></div> <br>
+				<div id="track3time">00:00/00:00</div>
+			</td>
+
+		</tr><!-- <tr>
+
+			<td><h4>Set Time</h4></td>
+
+			<td><input type="text" id="track1setTime"></td>
+
+
+		</tr> --><tr>
+
+			<td><h4>Play</h4> </td>
+
+			<td><button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').play()">Drone</button></td>
+			<td><button onclick="if(Mixer.getTrack('track2')) Mixer.getTrack('track2').play()">track2</button></td>
+			<td><button onclick="if(Mixer.getTrack('track3')) Mixer.getTrack('track3').play()">track3</button></td>
+
+		</tr><tr>
+
+			<td><h4>Pause</h4> </td>
+
+			<td><button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').pause()">Drone</button></td>
+			<td><button onclick="if(Mixer.getTrack('track2')) Mixer.getTrack('track2').pause()">track2</button></td>
+			<td><button onclick="if(Mixer.getTrack('track3')) Mixer.getTrack('track3').pause()">track3</button></td>
+
+		</tr><tr>
+
+			<td><h4>Stop</h4> </td>
+
+			<td><button onclick="if(Mixer.getTrack('track1')) Mixer.getTrack('track1').stop()">Drone</button></td>
+			<td><button onclick="if(Mixer.getTrack('track2')) Mixer.getTrack('track2').stop()">track2</button></td>
+			<td><button onclick="if(Mixer.getTrack('track3')) Mixer.getTrack('track3').stop()">track3</button></td>
+
+
+	</table>
+
+
+	<br><br><br>
+
+
+	<h4>Mixer</h4>
+
+	<button onclick="Mixer.pause()">Pause All ||</button>
+	<button onclick="Mixer.play()">Play All &gt;</button>
+	<button onclick="Mixer.stop()">Stop All</button>
+
+	<button id="mix-mute" onclick="mute()">Toggle Mute</button>
+
+	<input name="mastergain" id="mastergain" type="range" min="0" max="100" value="100">
+
+
+	<script src="js/bowser.min.js"></script>
+	<script src="js/tween.min.js"></script>
+	<script src="js/frameRunner.js"></script>
+
+	<script src="js/helios-audio-mixer.js"></script>
+
+	<script src="demo.js"></script>
+
+</body>
+</html>
