@@ -1,0 +1,24 @@
+{
+  "name": "vivapokegotchi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: omg fix this pls\" && exit 1",
+    "js": "browserify main.js  -o bundle.js  -t [ babelify ]",
+    "watchjs": "watchify main.js -o bundle.js  -t [ babelify ] -v",
+    "serve": "browser-sync start --server --port='8080' --files='**.**'",
+    "dev": "npm run serve & npm run watchjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "phaser": "^2.4.4"
+  },
+  "devDependencies": {
+    "babelify": "^7.2.0",
+    "browser-sync": "^2.9.12",
+    "browserify": "^12.0.1",
+    "watchify": "^3.6.0"
+  }
+}
